@@ -1,34 +1,27 @@
 <template>
-  <!-- this is the html for the main page -->
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link> |
-    <router-link to="/test">Test</router-link>
-  </nav>
-  <!-- router-view is replaced by the selected component -->
-  <router-view />
+  <p>this is my text</p>
+  <p>this is more of my text</p>
+  <!-- <HelloWorld /> -->
 </template>
 
+<script>
+// import HelloWorld from './components/HelloWorld.vue'
 
-<style lang="scss">
+export default {
+  name: 'App',
+  // components: {
+  //   HelloWorld
+  // }
+}
+</script>
+
+<style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-}
-
-nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+  margin-top: 60px;
 }
 </style>
