@@ -10,7 +10,7 @@ import NavBar from './components/NavBar.vue';
 
 <style>
 #spacing {
-  padding-top: 150px;
+  padding-top: 80px;
 }
 
 #app {

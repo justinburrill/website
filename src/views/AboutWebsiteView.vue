@@ -1,26 +1,37 @@
 <template>
   <h2>This website is built with:</h2>
   <div class="flex-container">
-    <div><img src="../assets/logo.png"></div>
-    <div>2</div>
-    <div>3</div>
-    <div>4</div>
+    <div>
+      <img class="logo" src="../assets/vue-logo.png">
+      <p class="img-label">Vue.js</p>
+    </div>
+    <div>logo2</div>
+    <div>logo3</div>
+    <div>logo4</div>
   </div>
-  <h2>This website is hosted on:</h2>
-  <p>apache2</p>
+  <p>This website is self-hosted on a ThinkPad running Ubuntu sever 22.04 with Apache2.</p>
 </template>
 
 <style>
+* {
+  font-size: 22px;
+}
+
 .flex-container {
   display: flex;
-  background-color: lightgrey;
 }
 
 .flex-container>div {
   padding: 50px;
 }
 
-img {
+.img-label {
+  text-align: center;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 25px;
+}
+
+.logo {
   height: 200px;
   width: 200px;
 }

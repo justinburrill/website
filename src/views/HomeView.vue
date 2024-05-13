@@ -1,6 +1,7 @@
 <template>
   <div class="home">
-    <p>my text :)</p>
+    <p>this is my placeholder text</p>
+    <img src="../assets/dog.jpg" height="500px">
   </div>
 </template>
 
@@ -15,3 +16,13 @@ export default {
   // }
 }
 </script>
+
+<style>
+p {
+  font-size: 25px;
+}
+
+.home {
+  text-align: center;
+}
+</style>
