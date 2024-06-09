@@ -9,7 +9,10 @@
       <img class="logo" src="../assets/apache-logo.png">
       <p class="img-label">Apache2</p>
     </div>
-    <div>logo3</div>
+    <div>
+      <img class="logo" src="../assets/sass-logo.png">
+      <p class="img-label">Sass</p>
+    </div>
     <div>logo4</div>
   </div>
   <p>This website is self-hosted on a ThinkPad running Ubuntu sever 22.04 with Apache2.</p>

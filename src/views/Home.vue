@@ -17,12 +17,4 @@ export default {
 }
 </script>
 
-<style>
-p {
-  font-size: 25px;
-}
-
-.home {
-  text-align: center;
-}
-</style>
+<style src="../styles/Home.sass" lang="sass" />

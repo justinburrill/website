@@ -3,6 +3,11 @@ import HomeView from '../views/Home.vue'
 
 const routes = [
   {
+    path: '/:pathMatch(.*)*',
+    name: '404Page',
+    component: () => import("../views/404Page.vue")
+  },
+  {
     path: '/',
     name: 'home',
     component: HomeView
@@ -16,8 +21,8 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutWebsite.vue')
   },
   {
-    path: '/interactive-demos',
-    name: 'interactive-demos',
+    path: '/interactive-projects',
+    name: 'interactive-projects',
     component: () => import("../views/InteractiveDemos.vue")
   }
 ]
