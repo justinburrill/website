@@ -1,4 +1,5 @@
 
+@use 'common.sass'
 *
     font-size: 22px
 
@@ -8,11 +9,34 @@
     &>div
         padding: 50px
 
-.img-label
-    text-align: center
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif
-    font-size: 25px
+.logo-box
+    $size: 180px
+    width: $size
+    height: $size
+    border-radius: 15%
+    margin: 3px
+    // border: #aaaaaa solid 5px
+
+#vue-box
+    background-image: linear-gradient(135deg, #09e485 0%,#0291e3 100%)
+    > p
+        color: white
+
+#sass-box
+    // background-image: linear-gradient(320deg, #CC6699 0%,#fcecec 50%)
+    background-image: linear-gradient(320deg, #CC6699 0%,#fcecec 50%)
+
+#logo-div
+    align-items: center
+    justify-content: center
+
+.logo-label
+    margin-top: 10px
+    font-weight: bold
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+    font-size: 34px
 
 .logo
-    height: 200px
-    width: 200px
+    $size: 150px
+    height: $size
+    width: $size

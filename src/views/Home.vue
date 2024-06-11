@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="center">
     <p>this is my placeholder text</p>
     <img src="../assets/dog.jpg" height="500px">
   </div>
