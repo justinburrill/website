@@ -24,6 +24,11 @@ const routes = [
     path: '/interactive-projects',
     name: 'interactive-projects',
     component: () => import("../views/InteractiveDemos.vue")
+  },
+  {
+    path: '/gradquote',
+    name: 'gradquote',
+    component: () => import("../views/GradQuote.vue")
   }
 ]
 
