@@ -24,5 +24,6 @@ if (import.meta.url === Deno.mainModule) {
     await send(context, urlPath, { root: buildPath });
   });
 
+  console.log(`Listening on port ${PORT}`);
   await app.listen({ port: PORT });
 }
