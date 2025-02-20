@@ -2,7 +2,7 @@ import subprocess
 
 
 def main():
-    #x = subprocess.run(["sensors"])
+    # x = subprocess.run(["sensors"])
     cpu_line = ""
     with open("sensors.txt", "r") as f:
         lines = f.readlines()
@@ -13,6 +13,7 @@ def main():
 
     cpu_line = cpu_line.removeprefix("CPU:").strip()
     print(cpu_line)
+
 
 if __name__ == "__main__":
     main()

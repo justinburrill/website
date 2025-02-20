@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkwebsite"]=self["webpackChunkwebsite"]||[]).push([[432],{5891:function(e,t,n){n.r(t),n.d(t,{default:function(){return f}});var u=n(952),r=n.p+"img/gradquote.9ffddaf3.jpg";const s={class:"center"};function a(e,t){return(0,u.uX)(),(0,u.CE)("div",s,t[0]||(t[0]=[(0,u.Lk)("img",{src:r,height:"auto",width:"500px"},null,-1),(0,u.Lk)("p",null,"My grad quote 2023",-1)]))}var c=n(2387);const i={},d=(0,c.A)(i,[["render",a]]);var f=d}}]);
+//# sourceMappingURL=432.9c7de8fb.js.map
