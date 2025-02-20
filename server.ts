@@ -1,6 +1,8 @@
 import { send } from "@oak/oak/send";
 import { Application } from "jsr:@oak/oak/";
 
+const PORT = 80; // used to be 8080
+
 // main
 if (import.meta.url === Deno.mainModule) {
   const buildPath = `${Deno.cwd()}/frontend/dist`;
@@ -22,5 +24,5 @@ if (import.meta.url === Deno.mainModule) {
     await send(context, urlPath, { root: buildPath });
   });
 
-  await app.listen({ port: 8080 });
+  await app.listen({ port: PORT });
 }
