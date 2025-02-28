@@ -2,7 +2,8 @@
 node_modules
 SERVERINFO
 start.sh
-/dist
+frontend/dist/
+frontend/dist/*
 
 
 # local env files

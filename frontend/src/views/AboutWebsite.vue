@@ -25,24 +25,23 @@
 </template>
 
 <style src="../styles/AboutWebsite.sass" lang="sass" />
-<script>
-function loadFile(filePath) {
-    // https://stackoverflow.com/questions/36921947/read-a-server-side-file-using-javascript
-    let result = null;
-    let xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("GET", filePath);
-    xmlhttp.send();
+<script setup lang="ts">
 
-    if (xmlhttp.status == 200) {
-        result = xmlhttp.responseText;
-    }
-    else {
-        console.log("xmlhttp returned", xmlhttp.status);
-        console.log("responseText:", xmlhttp.responseText);
-    }
-    return result;
-}
 
-let result = loadFile("http://localhost:8080/sensors.txt");
-console.log(result);
+// let fetchUrl: string = `${window.location.origin}/data`;
+// let reqObj = {
+//     method: "POST",
+//     body: JSON.stringify({
+//         target: "CPUtemp"
+//     })
+// };
+// fetch(fetchUrl, reqObj).then(
+//     (response) => response.json())
+//     .then((data) => {
+//         console.log(`fetched data: ${data}`)
+//     }).catch((err) => {
+//         console.error(`Couldn't fetch due to ${err}`)
+//     })
+
+
 </script>
