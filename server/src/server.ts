@@ -1,7 +1,5 @@
 import { Application, Router, send } from "jsr:@oak/oak/";
 import { readFileSync } from "jsr:@std/fs/unstable-read-file";
-import { isValidPath } from "./paths.ts";
-import { getMimeType } from "./mime_types.ts";
 import { handlePostRequest } from "./posts.ts";
 
 let PORT: number = 80; // used to be 8080
@@ -49,7 +47,7 @@ router.post("/data", async (ctx) => {
 
 // serve static file based on request url pathname
 app.use(async (context, next) => {
-    console.dir(context.request);
+    // console.dir(context.request);
     try {
         const pathname = context.request.url.pathname;
         // if (!isValidPath(pathname)) throw "400"; // should do some security checks here, this function doesn't work tho
