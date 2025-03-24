@@ -7,8 +7,8 @@
                 <img class="logo" src="../assets/vue-logo.png">
                 <p class="logo-label">Vue.js</p>
             </div>
-            <div class="logo-box" id="apache-box">
-                <img class="logo" src="../assets/apache-logo.png">
+            <div class="logo-box" id="deno-box">
+                <img class="logo" src="../assets/deno-logo.png">
                 <!-- <p class="logo-label">Apache2</p> -->
             </div>
             <div class="logo-box" id="sass-box">
