@@ -23,7 +23,7 @@ let PORT: number = 80; // used to be 8080
 const router = new Router();
 const app = new Application();
 app.use(router.routes());
-app.use(router.allowedMethods());
+app.use(router.allowedMethods()); // do i need this?
 export const buildPath = `${Deno.cwd()}/../frontend/dist`;
 const indexPath = "index.html";
 // =========================
