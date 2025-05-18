@@ -1,19 +1,34 @@
-export async function getCpuTemp(): Promise<[string, number]> {
-  const process = new Deno.Command("python3", {
-    args: ["read_cpu_temp.py"],
-    stdout: "piped",
-    stderr: "piped",
-  });
-  const { stdout, stderr } = await process.output();
-  if (stderr.length > 0) {
-    console.error(
-      "calling python script failed due to:",
-      new TextDecoder().decode(stderr),
-    );
-    return ["ERROR: internal fuck-up", 500];
-  }
+async function commandOutput(command: string): Promise<string> {
+    const parts = command.split(" ");
+    const command_name = parts[0];
+    const args = parts.splice(1);
+    const process = new Deno.Command(command_name, {
+        args: args,
+        stdout: "piped",
+        stderr: "piped",
+    });
+    const { stdout, stderr } = await process.output();
+    if (stderr.length > 0) {
+        throw new TextDecoder().decode(stderr);
+    } else {
+        return new TextDecoder().decode(stdout);
+    }
+}
 
-  const result = new TextDecoder().decode(stdout);
-  console.log(`successfully returned Cpu temp: ${result}`);
-  return [result, 200];
+export async function getCpuTemp(): Promise<[string, number]> {
+    try {
+        const result = await commandOutput("python3 read_cp_temp.py");
+        console.log(`successfully returned Cpu temp: ${result}`);
+        return [result, 200];
+    } catch {
+        console.error(
+            "calling python script failed due to:",
+        );
+        return ["ERROR: internal fuck-up", 500];
+    }
+}
+
+export async function getGitFiles(reponame: string): Promise<[string, number]> {
+    let result = await commandOutput("git ls-tree -r master --name-only");
+    throw "todo";
 }
