@@ -11,4 +11,4 @@ cd "$parent_path/frontend" && pnpm run build && cd - || exit
 
 # start it!
 echo "--- Starting deno server... ---"
-deno --allow-read --allow-net $parent_path/src/server.ts
+deno --allow-read --allow-net $parent_path/server/src/server.ts
