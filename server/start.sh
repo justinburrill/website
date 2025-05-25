@@ -12,7 +12,7 @@ install_script_path="$parent_path/server/install.sh"
 
 # npm install sorta thing
 echo "--- Checking front-end dependencies... ---"
-[ -d "$parent_path/frontend/node_modules" ] && chmod +x $install_script_path && $install_script_path "$parent_path/frontend" $pnpm_path
+[ -d "$parent_path/frontend/node_modules" ] && chmod +x $install_script_path && $install_script_path "$parent_path/frontend" "$deno_path" "$pnpm_path"
 
 # build frontend
 echo "--- Building front-end... ---"
