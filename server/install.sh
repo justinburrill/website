@@ -1,9 +1,10 @@
 #!/bin/bash
 
 frontend_path="$1"
-pnpm_path="$2"
+deno_path="$2"
+pnpm_path="$3"
 
-pnpm add -D vite
+$pnpm_path add -D vite
 
-deno i
+$deno_path i
 (cd $frontend_path && $pnpm_path i)
