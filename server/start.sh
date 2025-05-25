@@ -1,10 +1,8 @@
 #!/bin/bash
 
-deno_path="$1"
-[ -z $deno_path ] && deno_path="deno"
+deno_path="${1:=deno}"
 
-pnpm_path="$2"
-[ -z $pnpm_path ] && pnpm_path="pnpm"
+pnpm_path="${2:=pnpm}"
 
 echo $deno_path
 echo $pnpm_path
