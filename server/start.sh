@@ -1,11 +1,12 @@
 #!/bin/bash
+parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 
 # npm install sorta thing
-[ -d "../frontend/node_modules" ] && ./install.sh
+[ -d "$parent_path/frontend/node_modules" ] && ./install.sh
 
 # build frontend
 echo "--- Building front-end... ---"
-cd ../frontend && pnpm run build && cd - || exit
+cd "$parent_path/frontend" && pnpm run build && cd - || exit
 
 # start it!
 echo "--- Starting deno server... ---"
