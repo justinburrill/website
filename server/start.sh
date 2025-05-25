@@ -1,5 +1,5 @@
 #!/bin/bash
-parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
+parent_path="$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )/.."
 
 # npm install sorta thing
 [ -d "$parent_path/frontend/node_modules" ] && ./install.sh
