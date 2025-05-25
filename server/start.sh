@@ -1,7 +1,5 @@
 #!/bin/bash
 
-echo $1
-echo $2
 deno_path="${1:-'deno'}"
 
 pnpm_path="${2:-'pnpm'}"
