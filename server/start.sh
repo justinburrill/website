@@ -1,8 +1,8 @@
 #!/bin/bash
 
-deno_path="${1:='deno'}"
+deno_path="${1:-'deno'}"
 
-pnpm_path="${2:='pnpm'}"
+pnpm_path="${2:-'pnpm'}"
 
 echo $deno_path
 echo $pnpm_path
