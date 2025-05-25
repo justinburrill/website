@@ -2,7 +2,7 @@ import { Application, Router, send } from "jsr:@oak/oak/";
 import { readFileSync } from "jsr:@std/fs/unstable-read-file";
 import { handlePostRequest } from "./posts.ts";
 
-let PORT: number = 80; // used to be 8080
+let PORT: number = 8080;
 { // LOAD SERVER INFO FROM FILE
     try {
         const decoder = new TextDecoder("utf-8");
@@ -35,14 +35,21 @@ app.use(async (context, next) => {
     await next();
 });
 
-router.post("/data", async (ctx) => {
-    try {
-        await handlePostRequest(ctx);
-    } catch (err) {
-        ctx.response.status = 400;
-        ctx.response.body = { message: `Error: invalid request` };
-        console.log(`Errored on POST request due to ${err}`);
+// HANDLE POST REQS
+app.use(async (ctx, next) => {
+    if (ctx.request.method == "POST") {
+        try {
+            await handlePostRequest(ctx);
+        } catch (err) {
+            ctx.response.status = 400;
+            ctx.response.body = { message: `Error: invalid request` };
+            console.log(`Errored on POST request due to ${err}`);
+        }
     }
+    next();
+});
+
+router.post("/data", async (ctx) => {
 });
 
 // serve static file based on request url pathname
