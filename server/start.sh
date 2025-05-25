@@ -1,9 +1,10 @@
 #!/bin/bash
 parent_path="$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )/.."
+install_script_path="$parent_path/server/install.sh"
 
 # npm install sorta thing
 echo "--- Checking front-end dependencies... ---"
-[ -d "$parent_path/frontend/node_modules" ] && $parent_path/server/install.sh
+[ -d "$parent_path/frontend/node_modules" ] && chmod +x $install_script_path && $install_script_path
 
 # build frontend
 echo "--- Building front-end... ---"

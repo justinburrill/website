@@ -54,25 +54,26 @@ router.post("/data", async (ctx) => {
 
 // serve static file based on request url pathname
 app.use(async (context, next) => {
-    // console.dir(context.request);
-    try {
-        const pathname = context.request.url.pathname;
-        // if (!isValidPath(pathname)) throw "400"; // should do some security checks here, this function doesn't work tho
-        console.log(`serving to specific path: ${pathname}`);
-        await send(context, pathname, {
-            root: buildPath,
-            index: indexPath,
-        });
-    } catch (err) {
-        // fallback to the home page
+    if (context.request.method == "GET") {
         try {
-            context.response.status = parseInt(err as string);
-        } catch {
-            context.response.status = 404;
-        }
+            const pathname = context.request.url.pathname;
+            // if (!isValidPath(pathname)) throw "400"; // should do some security checks here, this function doesn't work tho
+            console.log(`serving to specific path: ${pathname}`);
+            send(context, pathname, {
+                root: buildPath,
+                index: indexPath,
+            });
+        } catch (err) {
+            // fallback to the home page
+            try {
+                context.response.status = parseInt(err as string);
+            } catch {
+                context.response.status = 404;
+            }
 
-        console.log(`Failed to serve to specific pathname due to:\n${err}`);
-        await next();
+            console.log(`Failed to serve to specific pathname due to:\n${err}`);
+            await next();
+        }
     }
 });
 

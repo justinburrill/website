@@ -1,3 +1,4 @@
+import { cloneState } from "https://jsr.io/@oak/oak/17.1.4/utils/clone_state.ts";
 import { getCpuTemp } from "./read_data.ts";
 import { Context } from "jsr:@oak/oak/";
 

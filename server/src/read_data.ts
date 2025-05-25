@@ -1,3 +1,6 @@
+import { INTERNAL_ERROR, NOT_IMPLEMENTED_ERROR } from "./errors.ts";
+type Duration = Temporal.Duration;
+
 async function commandOutput(command: string): Promise<string> {
     const parts = command.split(" ");
     const command_name = parts[0];
@@ -15,20 +18,44 @@ async function commandOutput(command: string): Promise<string> {
     }
 }
 
-export async function getCpuTemp(): Promise<[string, number]> {
+export async function getCpuTemp(): Promise<string> {
     try {
         const result = await commandOutput("python3 read_cp_temp.py");
         console.log(`successfully returned Cpu temp: ${result}`);
-        return [result, 200];
-    } catch {
+        return result;
+    } catch (err) {
         console.error(
-            "calling python script failed due to:",
+            `calling python script failed due to: ${err}`,
         );
-        return ["ERROR: internal fuck-up", 500];
+        throw err;
     }
 }
 
+async function getUptimeString(): Promise<string> {
+    try {
+        const timestr = await commandOutput("uptime");
+        return [timestr, 200];
+    } catch (err) {
+        console.error(`couldn't get uptime because: ${err}`);
+        return INTERNAL_ERROR;
+    }
+}
+
+export async function getUptimeDuration(): Promise<[Duration]> {
+    const result = await getUptimeString();
+    if (result[1] != 200) {
+        return result;
+    }
+
+    throw NOT_IMPLEMENTED_ERROR;
+}
+
 export async function getGitFiles(reponame: string): Promise<[string, number]> {
-    let result = await commandOutput("git ls-tree -r master --name-only");
+    try {
+        let result: string = await commandOutput(
+            "git ls-tree -r master --name-only",
+        );
+    } catch {
+    }
     throw "todo";
 }
