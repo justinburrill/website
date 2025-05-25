@@ -6,6 +6,9 @@ deno_path="$1"
 pnpm_path="$2"
 [ -z $pnpm_path ] && pnpm_path="pnpm"
 
+echo $deno_path
+echo $pnpm_path
+
 parent_path="$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )/.."
 install_script_path="$parent_path/server/install.sh"
 
