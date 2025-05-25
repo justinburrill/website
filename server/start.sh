@@ -2,7 +2,7 @@
 parent_path="$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )/.."
 
 # npm install sorta thing
-[ -d "$parent_path/frontend/node_modules" ] && ./install.sh
+[ -d "$parent_path/frontend/node_modules" ] && $parent_path/server/install.sh
 
 # build frontend
 echo "--- Building front-end... ---"
