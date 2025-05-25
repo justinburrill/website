@@ -34,7 +34,7 @@ export async function getCpuTemp(): Promise<string> {
 async function getUptimeString(): Promise<string> {
     try {
         const timestr = await commandOutput("uptime");
-        return [timestr, 200];
+        return timestr;
     } catch (err) {
         console.error(`couldn't get uptime because: ${err}`);
         return INTERNAL_ERROR;
@@ -43,9 +43,6 @@ async function getUptimeString(): Promise<string> {
 
 export async function getUptimeDuration(): Promise<[Duration]> {
     const result = await getUptimeString();
-    if (result[1] != 200) {
-        return result;
-    }
 
     throw NOT_IMPLEMENTED_ERROR;
 }
