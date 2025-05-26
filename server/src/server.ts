@@ -14,7 +14,7 @@ log(`Deno.cwd(): ${Deno.cwd()}`);
 log(`WEBSITE_ROOT: ${WEBSITE_ROOT}`);
 
 let PORT: number = 8080;
-let buildPath: string = `${FRONTEND_ROOT}/dist`;
+const buildPath: string = `${FRONTEND_ROOT}/dist`;
 { // LOAD SERVER INFO FROM FILE
     try {
         const decoder = new TextDecoder("utf-8");
@@ -23,7 +23,6 @@ let buildPath: string = `${FRONTEND_ROOT}/dist`;
             decoder.decode(readFileSync(configFilepath)),
         );
         PORT = datajson.port || PORT;
-        buildPath = datajson.buildPath || buildPath;
         log(`read config file, serving on port ${PORT}`);
     } catch (e) {
         const errstr: string = e as string;
@@ -40,7 +39,8 @@ let buildPath: string = `${FRONTEND_ROOT}/dist`;
 }
 
 log(`Website dist path: ${buildPath}`);
-// =========================
+
+// ========================= SET UP SERVER
 const router = new Router();
 const app = new Application();
 app.use(router.routes());
