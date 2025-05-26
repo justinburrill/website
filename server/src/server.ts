@@ -16,7 +16,8 @@ let buildPath = `${Deno.cwd()}/../frontend/dist`;
         log(`read config file, serving on port ${PORT}`);
         // PORT = Number(decoder.decode(data));
     } catch (e) {
-        if ((e as string).startsWith("NotFound: No such file or directory")) {
+        const errstr = e as string;
+        if (errstr.startsWith("NotFound: No such file or directory")) {
             log("No .SERVERINFO file, using default settings");
         } else {
             log(
@@ -55,8 +56,8 @@ app.use(async (ctx, next) => {
     next();
 });
 
-router.post("/data", async (ctx) => {
-});
+// router.post("/data", async (ctx) => {
+// });
 
 // serve static file based on request url pathname
 app.use(async (context, next) => {
