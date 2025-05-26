@@ -4,20 +4,22 @@ import { handlePostRequest } from "./posts.ts";
 import { log } from "./utils.ts";
 
 let PORT: number = 8080;
-let buildPath = `${Deno.cwd()}/../frontend/dist`;
+let buildPath: string = `${Deno.cwd()}/../frontend/dist`;
 { // LOAD SERVER INFO FROM FILE
     try {
         const decoder = new TextDecoder("utf-8");
-        const filename: string = ".SERVERINFO";
-        const data = readFileSync(filename);
-        const datajson = JSON.parse(decoder.decode(data));
+        const configFilepath: string = ".SERVERINFO";
+        const datajson = JSON.parse(
+            decoder.decode(readFileSync(configFilepath)),
+        );
         PORT = datajson.port;
         buildPath = datajson.buildPath;
         log(`read config file, serving on port ${PORT}`);
-        // PORT = Number(decoder.decode(data));
     } catch (e) {
-        const errstr = e as string;
-        if (errstr.startsWith("NotFound: No such file or directory")) {
+        const errstr: string = e as string;
+        if (
+            errstr.toString().startsWith("NotFound: No such file or directory")
+        ) {
             log("No .SERVERINFO file, using default settings");
         } else {
             log(
