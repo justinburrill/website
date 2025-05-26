@@ -7,7 +7,5 @@ server="$parent_path/server"
 deno_path="$2"
 pnpm_path="$3"
 
-$pnpm_path add -D vite
-
-$deno_path i
-(cd $frontend && $pnpm_path i)
+(cd $server && $deno_path i)
+(cd $frontend && $pnpm_path add -D vite && $pnpm_path i)
