@@ -29,12 +29,13 @@ let buildPath: string = `${Deno.cwd()}/../frontend/dist`;
     }
 }
 
+log(`Website dist path: ${buildPath}`);
 // =========================
 const router = new Router();
 const app = new Application();
 app.use(router.routes());
 app.use(router.allowedMethods()); // do i need this?
-const indexPath = "index.html";
+const indexFileName = "index.html";
 // =========================
 
 app.use(async (context, next) => {
@@ -70,7 +71,7 @@ app.use(async (context, next) => {
             log(`serving to specific path: ${pathname}`);
             send(context, pathname, {
                 root: buildPath,
-                index: indexPath,
+                index: indexFileName,
             });
         } catch (err) {
             // fallback to the home page
@@ -91,7 +92,7 @@ app.use(async (context, next) => {
 // serve index page
 app.use(async (context) => {
     log("serving index page");
-    await send(context, indexPath, { root: buildPath });
+    await send(context, indexFileName, { root: buildPath });
 });
 
 log(`Listening on port ${PORT}`);
