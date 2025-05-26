@@ -1,19 +1,29 @@
 import { Application, Router, send } from "jsr:@oak/oak/";
 import { readFileSync } from "jsr:@std/fs/unstable-read-file";
+import * as path from "jsr:@std/path";
 import { handlePostRequest } from "./posts.ts";
 import { log } from "./utils.ts";
 
+const WEBSITE_ROOT = path.resolve(path.join(
+    path.dirname(path.fromFileUrl(import.meta.url)),
+    "../..",
+));
+const SERVER_ROOT = path.join(WEBSITE_ROOT, "/server");
+const FRONTEND_ROOT = path.join(WEBSITE_ROOT, "/frontend");
+log(`Deno.cwd(): ${Deno.cwd()}`);
+log(`WEBSITE_ROOT: ${WEBSITE_ROOT}`);
+
 let PORT: number = 8080;
-let buildPath: string = `${Deno.cwd()}/../frontend/dist`;
+let buildPath: string = `${FRONTEND_ROOT}/dist`;
 { // LOAD SERVER INFO FROM FILE
     try {
         const decoder = new TextDecoder("utf-8");
-        const configFilepath: string = ".SERVERINFO";
+        const configFilepath: string = path.join(SERVER_ROOT, ".SERVERINFO");
         const datajson = JSON.parse(
             decoder.decode(readFileSync(configFilepath)),
         );
-        PORT = datajson.port;
-        buildPath = datajson.buildPath;
+        PORT = datajson.port || PORT;
+        buildPath = datajson.buildPath || buildPath;
         log(`read config file, serving on port ${PORT}`);
     } catch (e) {
         const errstr: string = e as string;
