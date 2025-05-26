@@ -1,8 +1,10 @@
 import { Application, Router, send } from "jsr:@oak/oak/";
 import { readFileSync } from "jsr:@std/fs/unstable-read-file";
 import { handlePostRequest } from "./posts.ts";
+import { log } from "./utils.ts";
 
 let PORT: number = 8080;
+let buildPath = `${Deno.cwd()}/../frontend/dist`;
 { // LOAD SERVER INFO FROM FILE
     try {
         const decoder = new TextDecoder("utf-8");
@@ -10,12 +12,17 @@ let PORT: number = 8080;
         const data = readFileSync(filename);
         const datajson = JSON.parse(decoder.decode(data));
         PORT = datajson.port;
-        console.log(`-- read config file, serving on port ${PORT} --\n`);
+        buildPath = datajson.buildPath;
+        log(`read config file, serving on port ${PORT}`);
         // PORT = Number(decoder.decode(data));
     } catch (e) {
-        console.log(
-            ` -- error reading port specification file, using default settings due to: --\n${e}`,
-        );
+        if ((e as string).startsWith("NotFound: No such file or directory")) {
+            log("No .SERVERINFO file, using default settings");
+        } else {
+            log(
+                `error reading port specification file, using default settings due to: ${e}`,
+            );
+        }
     }
 }
 
@@ -24,7 +31,6 @@ const router = new Router();
 const app = new Application();
 app.use(router.routes());
 app.use(router.allowedMethods()); // do i need this?
-export const buildPath = `${Deno.cwd()}/../frontend/dist`;
 const indexPath = "index.html";
 // =========================
 
@@ -58,7 +64,7 @@ app.use(async (context, next) => {
         try {
             const pathname = context.request.url.pathname;
             // if (!isValidPath(pathname)) throw "400"; // should do some security checks here, this function doesn't work tho
-            console.log(`serving to specific path: ${pathname}`);
+            log(`serving to specific path: ${pathname}`);
             send(context, pathname, {
                 root: buildPath,
                 index: indexPath,
@@ -71,7 +77,9 @@ app.use(async (context, next) => {
                 context.response.status = 404;
             }
 
-            console.log(`Failed to serve to specific pathname due to:\n${err}`);
+            console.error(
+                `Failed to serve to specific pathname due to:\n${err}`,
+            );
             await next();
         }
     }
@@ -79,11 +87,11 @@ app.use(async (context, next) => {
 
 // serve index page
 app.use(async (context) => {
-    console.log("serving index page");
+    log("serving index page");
     await send(context, indexPath, { root: buildPath });
 });
 
-console.log(`Listening on port ${PORT}`);
+log(`Listening on port ${PORT}`);
 await app.listen({ port: PORT });
 
 // // MAIN
