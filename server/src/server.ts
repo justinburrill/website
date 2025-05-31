@@ -48,17 +48,20 @@ app.use(router.allowedMethods()); // do i need this?
 const indexFileName = "index.html";
 // =========================
 
-app.use(async (context, next) => {
+app.use((context, next) => {
     console.log(
-        `new ${context.request.method} request to ${context.request.url}`,
+        `new ${context.request.method} request to ${context.request.url} from ${
+            context.request.ips || context.request.ip || "??"
+        }`,
     );
-    await next();
+    return next();
 });
 
 // HANDLE POST REQS
 app.use(async (ctx, next) => {
     if (ctx.request.method == "POST") {
         try {
+            log(`handling POST req`);
             await handlePostRequest(ctx);
         } catch (err) {
             ctx.response.status = 400;
@@ -66,35 +69,40 @@ app.use(async (ctx, next) => {
             console.log(`Errored on POST request due to ${err}`);
         }
     }
-    next();
+    return await next();
 });
 
 // router.post("/data", async (ctx) => {
 // });
 
 // serve static file based on request url pathname
-app.use(async (context, next) => {
-    if (context.request.method == "GET") {
+app.use(async (ctx, next) => {
+    if (ctx.request.method == "GET") {
         try {
-            const pathname = context.request.url.pathname;
+            const pathname = ctx.request.url.pathname;
             // if (!isValidPath(pathname)) throw "400"; // should do some security checks here, this function doesn't work tho
             log(`serving to specific path: ${pathname}`);
-            send(context, pathname, {
+            return await send(ctx, pathname, {
                 root: buildPath,
                 index: indexFileName,
             });
         } catch (err) {
+            console.error(
+                `Failed to serve to specific pathname due to: ${err}`,
+            );
+
             // fallback to the home page
-            try {
-                context.response.status = parseInt(err as string);
-            } catch {
-                context.response.status = 404;
+            if (ctx.response.writable) {
+                try {
+                    ctx.response.status = parseInt(err as string);
+                } catch {
+                    ctx.response.status = 404;
+                }
+            } else {
+                log("can't write error to response, it isn't writable");
             }
 
-            console.error(
-                `Failed to serve to specific pathname due to:\n${err}`,
-            );
-            await next();
+            return await next();
         }
     }
 });
@@ -102,7 +110,7 @@ app.use(async (context, next) => {
 // serve index page
 app.use(async (context) => {
     log("serving index page");
-    await send(context, indexFileName, { root: buildPath });
+    return await send(context, indexFileName, { root: buildPath });
 });
 
 log(`Listening on port ${PORT}`);
