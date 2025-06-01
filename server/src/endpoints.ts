@@ -1,11 +1,10 @@
-import { cloneState } from "https://jsr.io/@oak/oak/17.1.4/utils/clone_state.ts";
-import { getCpuTemp } from "./read_data.ts";
+import { getCpuTemp, getOsVersion } from "./read_data.ts";
 import { Context } from "jsr:@oak/oak/";
 
-export async function handlePostRequest(ctx: Context) {
+export async function handleDataRequest(ctx: Context) {
     const body = JSON.parse(await ctx.request.body.text());
     const target: string = body.target;
-    console.log(`post request to ${target}`);
+    console.log(`data get request to ${target}`);
     switch (target) {
         case "CPUtemp":
             ctx.response.status = 200;
@@ -14,6 +13,12 @@ export async function handlePostRequest(ctx: Context) {
             };
             break;
 
+        case "OSversion":
+            ctx.response.status = 200;
+            ctx.response.body = {
+                message: await getOsVersion(),
+            };
+            break;
         default:
             {
                 const ret_message =
