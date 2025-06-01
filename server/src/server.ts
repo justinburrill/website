@@ -10,6 +10,7 @@ const WEBSITE_ROOT = path.resolve(path.join(
 ));
 const SERVER_ROOT = path.join(WEBSITE_ROOT, "/server");
 const FRONTEND_ROOT = path.join(WEBSITE_ROOT, "/frontend");
+const CONFIG_NAME = ".SERVERINFO";
 log(`Deno.cwd(): ${Deno.cwd()}`);
 log(`WEBSITE_ROOT: ${WEBSITE_ROOT}`);
 
@@ -18,7 +19,7 @@ const buildPath: string = `${FRONTEND_ROOT}/dist`;
 { // LOAD SERVER INFO FROM FILE
     try {
         const decoder = new TextDecoder("utf-8");
-        const configFilepath: string = path.join(SERVER_ROOT, ".SERVERINFO");
+        const configFilepath: string = path.join(SERVER_ROOT, CONFIG_NAME);
         const datajson = JSON.parse(
             decoder.decode(readFileSync(configFilepath)),
         );
@@ -29,10 +30,10 @@ const buildPath: string = `${FRONTEND_ROOT}/dist`;
         if (
             errstr.toString().startsWith("NotFound: No such file or directory")
         ) {
-            log("No .SERVERINFO file, using default settings");
+            log(`No ${CONFIG_NAME} file, using default settings`);
         } else {
             log(
-                `error reading port specification file, using default settings due to: ${e}`,
+                `error reading ${CONFIG_NAME} file, using default settings due to: ${e}`,
             );
         }
     }
