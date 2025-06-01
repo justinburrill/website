@@ -51,23 +51,22 @@ const indexFileName = "index.html";
 
 // LOGGING
 app.use((context, next) => {
+    const ip = context.request.ips || context.request.ip || "??";
     console.log(
-        `new ${context.request.method} request to ${context.request.url} from ${
-            context.request.ips || context.request.ip || "??"
-        }`,
+        `new ${context.request.method} request to ${context.request.url} from ${ip}`,
     );
     return next();
 });
 
 // HANDLE GET DATA REQS
 app.use(async (ctx, next) => {
-    if (ctx.request.method == "GET") {
+    if (ctx.request.method == "GET" && ctx.request.url.pathname == "/data") {
         try {
             await handleDataRequest(ctx);
         } catch (err) {
             ctx.response.status = 400;
             ctx.response.body = { message: `Error: invalid request` };
-            console.error(`Errored on POST request due to ${err}`);
+            console.error(`Errored on DATA request due to ${err}`);
         }
     }
     return await next();
