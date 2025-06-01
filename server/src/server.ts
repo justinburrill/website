@@ -58,16 +58,16 @@ app.use((context, next) => {
     return next();
 });
 
-// HANDLE GET DATA REQS
+// HANDLE DATA ENDPOINTS
 app.use(async (ctx, next) => {
-    if (ctx.request.method == "GET" && ctx.request.url.pathname == "/data") {
+    if (ctx.request.method == "POST" && ctx.request.url.pathname == "/data") {
         try {
             await handleDataRequest(ctx);
             return;
         } catch (err) {
             ctx.response.status = 400;
             ctx.response.body = { message: `Error: invalid request` };
-            console.error(`Errored on DATA request due to ${err}`);
+            console.error(`Errored on data request due to ${err}`);
         }
     }
     return await next();
@@ -85,15 +85,21 @@ app.use(async (ctx, next) => {
                 index: indexFileName,
             });
         } catch (err) {
-            // don't need this
-            // console.error(
-            //     `Failed to serve to specific pathname due to: ${err}`,
-            // );
+            const errstr: string = err as string;
+            if (
+                !errstr.startsWith(
+                    "Failed to serve to specific pathname due to: NotFoundError: No such file or directory",
+                )
+            ) {
+                console.error(
+                    `Failed to serve to specific pathname due to: ${err}`,
+                );
+            }
 
             // fallback to the home page
             if (ctx.response.writable) {
                 try {
-                    ctx.response.status = parseInt(err as string);
+                    ctx.response.status = parseInt(errstr);
                 } catch {
                     ctx.response.status = 404;
                 }

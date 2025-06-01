@@ -1,7 +1,7 @@
 export async function fetchData(target: string): Promise<string> {
     let fetchUrl: string = `${window.location.origin}/data`;
     let reqObj = {
-        method: "GET",
+        method: "POST",
         body: JSON.stringify({
             target: target,
         }),
