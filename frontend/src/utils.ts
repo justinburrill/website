@@ -1,14 +1,24 @@
 export async function fetchData(target: string): Promise<string> {
     let fetchUrl: string = `${window.location.origin}/data`;
-    let reqObj = {
-        method: "POST",
-        body: JSON.stringify({
-            target: target,
-        }),
-    };
-    let data = await fetch(fetchUrl, reqObj).then((response) => response.json())
-        .catch((err) => {
-            console.error(`failed to fetch because ${err}`);
-        });
-    return data.message || "ERROR";
+    try {
+        let reqObj = {
+            method: "POST",
+            body: JSON.stringify({
+                target: target,
+            }),
+        };
+        let status;
+        let data = await fetch(fetchUrl, reqObj).then((response) => {
+            status = response.status;
+            return response.json();
+        })
+            .catch((err) => {
+                console.error(`failed to fetch because ${err}`);
+                throw err;
+            });
+        return status == 200 ? data.message : "ERROR";
+    } catch (err) {
+        console.log(`Failed to fetch data because: ${err}`);
+        return "ERROR";
+    }
 }
