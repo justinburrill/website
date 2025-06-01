@@ -1,7 +1,3 @@
-import { resourceLimits } from "node:worker_threads";
-import { INTERNAL_ERROR, NOT_IMPLEMENTED_ERROR } from "./errors.ts";
-type Duration = Temporal.Duration;
-
 async function commandOutput(command: string): Promise<string> {
     const parts = command.split(" ");
     const command_name = parts[0];
@@ -43,30 +39,4 @@ export async function getOsVersion(): Promise<string> {
         console.error(`couldn't get os version because ${err}`);
         throw err;
     }
-}
-
-async function getUptimeString(): Promise<string> {
-    try {
-        const timestr = await commandOutput("uptime");
-        return timestr;
-    } catch (err) {
-        console.error(`couldn't get uptime because: ${err}`);
-        return INTERNAL_ERROR;
-    }
-}
-
-export async function getUptimeDuration(): Promise<[Duration]> {
-    const result = await getUptimeString();
-
-    throw NOT_IMPLEMENTED_ERROR;
-}
-
-export async function getGitFiles(reponame: string): Promise<[string, number]> {
-    try {
-        let result: string = await commandOutput(
-            "git ls-tree -r master --name-only",
-        );
-    } catch {
-    }
-    throw "todo";
 }
