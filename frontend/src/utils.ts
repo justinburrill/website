@@ -10,5 +10,5 @@ export async function fetchData(target: string): Promise<string> {
         .catch((err) => {
             console.error(`failed to fetch because ${err}`);
         });
-    return data.message;
+    return data.message || "ERROR";
 }

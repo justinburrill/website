@@ -87,7 +87,7 @@ app.use(async (ctx, next) => {
         } catch (err) {
             const errstr: string = err as string;
             if (
-                !errstr.startsWith(
+                !errstr.toString().startsWith(
                     "Failed to serve to specific pathname due to: NotFoundError: No such file or directory",
                 )
             ) {
