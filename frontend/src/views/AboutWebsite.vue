@@ -31,7 +31,7 @@ import { ref } from 'vue';
 import { fetchData } from '../utils.ts';
 
 
-let OSversion = ref(fetchData("OSversion"));
-let CPUtemp = ref(fetchData("CPUtemp"));
+let OSversion = ref(await fetchData("OSversion"));
+let CPUtemp = ref(await fetchData("CPUtemp"));
 
 </script>
