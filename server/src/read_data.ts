@@ -1,3 +1,4 @@
+import { resourceLimits } from "node:worker_threads";
 import { INTERNAL_ERROR, NOT_IMPLEMENTED_ERROR } from "./errors.ts";
 type Duration = Temporal.Duration;
 
@@ -27,6 +28,19 @@ export async function getCpuTemp(): Promise<string> {
         console.error(
             `calling python script failed due to: ${err}`,
         );
+        throw err;
+    }
+}
+
+export async function getOsVersion(): Promise<string> {
+    try {
+        const version = await commandOutput(
+            "fastfetch | grep Ubuntu | awk '{ print $3 }'",
+        );
+        console.log(`got version ${version}`);
+        return version;
+    } catch (err) {
+        console.error(`couldn't get os version because ${err}`);
         throw err;
     }
 }

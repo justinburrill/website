@@ -1,6 +1,7 @@
 <template>
     <div class="center">
-        <p>This website hosted on a ThinkPad running Ubuntu sever 22.04</p>
+        <p>This website hosted on a ThinkPad running Ubuntu sever {{ OSversion }}</p>
+        <p>Current CPU temp: {{ CPUtemp }}</p>
         <p>I used these technologies:</p>
         <div id="logo-div" class="flex-container">
             <div class="logo-box" id="vue-box">
@@ -26,22 +27,11 @@
 
 <style src="../styles/AboutWebsite.sass" lang="sass" />
 <script setup lang="ts">
+import { ref } from 'vue';
+import { fetchData } from '../utils.ts';
 
 
-// let fetchUrl: string = `${window.location.origin}/data`;
-// let reqObj = {
-//     method: "POST",
-//     body: JSON.stringify({
-//         target: "CPUtemp"
-//     })
-// };
-// fetch(fetchUrl, reqObj).then(
-//     (response) => response.json())
-//     .then((data) => {
-//         console.log(`fetched data: ${data}`)
-//     }).catch((err) => {
-//         console.error(`Couldn't fetch due to ${err}`)
-//     })
-
+let OSversion = ref(fetchData("OSversion"));
+let CPUtemp = ref(fetchData("CPUtemp"));
 
 </script>

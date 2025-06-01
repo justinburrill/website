@@ -1,7 +1,7 @@
 import { Application, Router, send } from "jsr:@oak/oak/";
 import { readFileSync } from "jsr:@std/fs/unstable-read-file";
 import * as path from "jsr:@std/path";
-import { handlePostRequest } from "./posts.ts";
+import { handleDataRequest } from "./endpoints.ts";
 import { log } from "./utils.ts";
 
 const WEBSITE_ROOT = path.resolve(path.join(
@@ -49,6 +49,7 @@ app.use(router.allowedMethods()); // do i need this?
 const indexFileName = "index.html";
 // =========================
 
+// LOGGING
 app.use((context, next) => {
     console.log(
         `new ${context.request.method} request to ${context.request.url} from ${
@@ -58,25 +59,21 @@ app.use((context, next) => {
     return next();
 });
 
-// HANDLE POST REQS
+// HANDLE GET DATA REQS
 app.use(async (ctx, next) => {
-    if (ctx.request.method == "POST") {
+    if (ctx.request.method == "GET") {
         try {
-            log(`handling POST req`);
-            await handlePostRequest(ctx);
+            await handleDataRequest(ctx);
         } catch (err) {
             ctx.response.status = 400;
             ctx.response.body = { message: `Error: invalid request` };
-            console.log(`Errored on POST request due to ${err}`);
+            console.error(`Errored on POST request due to ${err}`);
         }
     }
     return await next();
 });
 
-// router.post("/data", async (ctx) => {
-// });
-
-// serve static file based on request url pathname
+// fallback to serve static file based on request url pathname
 app.use(async (ctx, next) => {
     if (ctx.request.method == "GET") {
         try {
