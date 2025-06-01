@@ -5,7 +5,7 @@ type Duration = Temporal.Duration;
 async function commandOutput(command: string): Promise<string> {
     const command_name = "bash";
     const args = ["-c", `cd ${SERVER_ROOT}/src && ` + command];
-    console.log(`command: ${command_name}, command args: ${args}`);
+    // console.log(`command: ${command_name}, command args: ${args}`);
     const process = new Deno.Command(command_name, {
         args: args,
         stdout: "piped",
@@ -27,7 +27,7 @@ async function commandOutput(command: string): Promise<string> {
 export async function getCpuTemp(): Promise<string> {
     try {
         const result = await commandOutput("python3 read_cpu_temp.py");
-        console.log(`successfully returned Cpu temp: ${result}`);
+        // console.log(`successfully returned Cpu temp: ${result}`);
         return result;
     } catch (err) {
         console.error(
@@ -42,7 +42,7 @@ export async function getOsVersion(): Promise<string> {
         const version = await commandOutput(
             "fastfetch | grep Ubuntu | head -1 | awk '{ print $3 }'",
         );
-        console.log(`got version ${version}`);
+        // console.log(`got version ${version}`);
         return version;
     } catch (err) {
         console.error(`couldn't get os version because ${err}`);
