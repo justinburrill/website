@@ -1,29 +1,25 @@
 import subprocess, sys
 
-
 def main():
     result = subprocess.run(["sensors"], capture_output=True)
     err = result.stderr.decode()
     if err != "":
         print(f"Error: {err}", file=sys.stderr)
+        exit(1)
+    output = result.stdout.decode()
 
     cpu_line = ""
-    for line in result.stdout.decode():
-        if line.startswith("CPU:"):
+    for line in output.splitlines():
+        if line.strip().startswith("CPU:"):
             cpu_line = line
             break
 
-    cpu_line = cpu_line.removeprefix("CPU:").strip()
+    if cpu_line.strip() == "":
+        raise Exception("couldn't find cpu temp")
+
+    cpu_line = cpu_line.strip().removeprefix("CPU:").strip()
     print(cpu_line)
 
 
 if __name__ == "__main__":
     main()
-
-    # cpu_line = ""
-    # with open("sensors.txt", "r") as f:
-    #     lines = f.readlines()
-    #     for line in lines:
-    #         if line.startswith("CPU:"):
-    #             cpu_line = line
-    #             break
