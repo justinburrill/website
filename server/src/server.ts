@@ -63,6 +63,7 @@ app.use(async (ctx, next) => {
     if (ctx.request.method == "GET" && ctx.request.url.pathname == "/data") {
         try {
             await handleDataRequest(ctx);
+            return;
         } catch (err) {
             ctx.response.status = 400;
             ctx.response.body = { message: `Error: invalid request` };
@@ -101,6 +102,11 @@ app.use(async (ctx, next) => {
 
             return await next();
         }
+    } // posts should have been handled by now (?)
+    else {
+        ctx.response.status = 404;
+        ctx.response.body = "Endpoint not recognized";
+        return;
     }
 });
 
