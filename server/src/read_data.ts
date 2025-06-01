@@ -3,8 +3,9 @@ type Duration = Temporal.Duration;
 
 async function commandOutput(command: string): Promise<string> {
     const parts = command.split(" ");
-    const command_name = parts[0];
-    const args = parts.splice(1);
+    const command_name = "bash";
+    const args = ["-c"].concat(parts);
+    console.log(`command: ${command_name}, command args: ${args}`);
     const process = new Deno.Command(command_name, {
         args: args,
         stdout: "piped",
