@@ -1,4 +1,3 @@
-import { resourceLimits } from "node:worker_threads";
 import { INTERNAL_ERROR, NOT_IMPLEMENTED_ERROR } from "./errors.ts";
 type Duration = Temporal.Duration;
 
