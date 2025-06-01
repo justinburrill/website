@@ -4,7 +4,7 @@ import { Context } from "jsr:@oak/oak/";
 export async function handleDataRequest(ctx: Context) {
     const body = JSON.parse(await ctx.request.body.text());
     const target: string = body.target;
-    console.log(`data get request to ${target}`);
+    console.log(`data request to on target '${target}'`);
     switch (target) {
         case "CPUtemp":
             ctx.response.status = 200;
