@@ -1,47 +1,52 @@
 import { INTERNAL_ERROR, NOT_IMPLEMENTED_ERROR } from "./errors.ts";
+import { SERVER_ROOT } from "./server.ts";
 type Duration = Temporal.Duration;
 
 async function commandOutput(command: string): Promise<string> {
-    const parts = command.split(" ");
     const command_name = "bash";
-    const args = ["-c"].concat(parts);
+    const args = ["-c", `cd ${SERVER_ROOT}/src && ` + command];
     console.log(`command: ${command_name}, command args: ${args}`);
     const process = new Deno.Command(command_name, {
         args: args,
         stdout: "piped",
         stderr: "piped",
     });
-    const { stdout, stderr } = await process.output();
+    const output = await process.output();
+    const { stdout, stderr } = output;
     if (stderr.length > 0) {
         throw new TextDecoder().decode(stderr);
+    } else if (!output.success) {
+        throw "Exited with non-zero status";
     } else {
-        return new TextDecoder().decode(stdout);
+        const result = new TextDecoder().decode(stdout);
+        if (result.trim().length == 0) throw "Empty command result";
+        return result;
     }
 }
 
 export async function getCpuTemp(): Promise<string> {
     try {
-        const result = await commandOutput("python3 read_cp_temp.py");
+        const result = await commandOutput("python3 read_cpu_temp.py");
         console.log(`successfully returned Cpu temp: ${result}`);
         return result;
     } catch (err) {
         console.error(
             `calling python script failed due to: ${err}`,
         );
-        throw err;
+        throw INTERNAL_ERROR;
     }
 }
 
 export async function getOsVersion(): Promise<string> {
     try {
         const version = await commandOutput(
-            "fastfetch | grep Ubuntu | awk '{ print $3 }'",
+            "fastfetch | grep Ubuntu | head -1 | awk '{ print $3 }'",
         );
         console.log(`got version ${version}`);
         return version;
     } catch (err) {
         console.error(`couldn't get os version because ${err}`);
-        throw err;
+        throw INTERNAL_ERROR;
     }
 }
 
@@ -51,7 +56,7 @@ async function getUptimeString(): Promise<string> {
         return timestr;
     } catch (err) {
         console.error(`couldn't get uptime because: ${err}`);
-        return INTERNAL_ERROR;
+        throw INTERNAL_ERROR;
     }
 }
 
@@ -68,5 +73,5 @@ export async function getGitFiles(reponame: string): Promise<[string, number]> {
         );
     } catch {
     }
-    throw "todo";
+    throw NOT_IMPLEMENTED_ERROR;
 }

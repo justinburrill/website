@@ -1,6 +1,6 @@
 <template>
     <div class="center">
-        <p>This website hosted on a ThinkPad running Ubuntu sever {{ OSversion }}</p>
+        <p>This website hosted on a ThinkPad running Ubuntu server {{ OSversion }}</p>
         <p>Current CPU temp: {{ CPUtemp }}</p>
         <p>I used these technologies:</p>
         <div id="logo-div" class="flex-container">
@@ -27,11 +27,19 @@
 
 <style src="../styles/AboutWebsite.sass" lang="sass" />
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { fetchData } from '../utils.ts';
 
+let OSversion = ref("version");
+let CPUtemp = ref("temp");
+async function setup() {
 
-let OSversion = ref(await fetchData("OSversion"));
-let CPUtemp = ref(await fetchData("CPUtemp"));
+    OSversion.value = await fetchData("OSversion");
+    CPUtemp.value = await fetchData("CPUtemp");
+    console.log(`OSversion: ${OSversion.value}`)
+    console.log(`CPUtemp: ${CPUtemp.value}`)
+}
 
+
+onMounted(setup);
 </script>

@@ -8,8 +8,8 @@ const WEBSITE_ROOT = path.resolve(path.join(
     path.dirname(path.fromFileUrl(import.meta.url)),
     "../..",
 ));
-const SERVER_ROOT = path.join(WEBSITE_ROOT, "/server");
-const FRONTEND_ROOT = path.join(WEBSITE_ROOT, "/frontend");
+export const SERVER_ROOT = path.join(WEBSITE_ROOT, "/server");
+export const FRONTEND_ROOT = path.join(WEBSITE_ROOT, "/frontend");
 const CONFIG_NAME = ".SERVERINFO";
 log(`Deno.cwd(): ${Deno.cwd()}`);
 log(`WEBSITE_ROOT: ${WEBSITE_ROOT}`);
@@ -65,9 +65,10 @@ app.use(async (ctx, next) => {
             await handleDataRequest(ctx);
             return;
         } catch (err) {
-            ctx.response.status = 400;
-            ctx.response.body = { message: `Error: invalid request` };
+            ctx.response.status = 500;
+            ctx.response.body = { message: err };
             console.error(`Errored on data request due to ${err}`);
+            return;
         }
     }
     return await next();
@@ -87,8 +88,8 @@ app.use(async (ctx, next) => {
         } catch (err) {
             const errstr: string = err as string;
             if (
-                !errstr.toString().startsWith(
-                    "Failed to serve to specific pathname due to: NotFoundError: No such file or directory",
+                !errstr.toString().trim().startsWith(
+                    "NotFoundError: No such file or directory",
                 )
             ) {
                 console.error(
