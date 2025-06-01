@@ -85,9 +85,10 @@ app.use(async (ctx, next) => {
                 index: indexFileName,
             });
         } catch (err) {
-            console.error(
-                `Failed to serve to specific pathname due to: ${err}`,
-            );
+            // don't need this
+            // console.error(
+            //     `Failed to serve to specific pathname due to: ${err}`,
+            // );
 
             // fallback to the home page
             if (ctx.response.writable) {
@@ -97,7 +98,9 @@ app.use(async (ctx, next) => {
                     ctx.response.status = 404;
                 }
             } else {
-                log("can't write error to response, it isn't writable");
+                console.error(
+                    "can't write error to response, it isn't writable",
+                );
             }
 
             return await next();
