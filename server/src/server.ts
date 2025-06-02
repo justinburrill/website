@@ -51,7 +51,9 @@ const indexFileName = "index.html";
 
 // LOGGING
 app.use((context, next) => {
-    const ip = context.request.ips || context.request.ip || "??";
+    let ip = context.request.ips.toString();
+    if (!ip) ip = context.request.ip;
+    if (!ip) ip = "??";
     console.log(
         `new ${context.request.method} request to ${context.request.url} from ${ip}`,
     );
