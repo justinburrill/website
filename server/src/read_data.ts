@@ -61,10 +61,3 @@ async function getUptimeString(): Promise<string> {
     }
     return outWords.join(" ");
 }
-
-export async function getGitFiles(reponame: string): Promise<string> {
-    let result: string = await commandOutput(
-        "git ls-tree -r master --name-only",
-    );
-    throw NOT_IMPLEMENTED_ERROR;
-}
