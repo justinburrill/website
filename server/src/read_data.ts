@@ -33,11 +33,10 @@ export async function getOsVersion(): Promise<string> {
     const version = await commandOutput(
         "fastfetch | grep Ubuntu | head -1 | awk '{ print $3 }'",
     );
-    // console.log(`got version ${version}`);
     return version;
 }
 
-async function getUptimeString(): Promise<string> {
+export async function getUptimeString(): Promise<string> {
     const timestr = await commandOutput("uptime");
     // example output:
     // 21:16:28 up  2:14,  1 user,  load average: 0.17, 0.21, 0.15

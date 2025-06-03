@@ -1,5 +1,5 @@
 import { INTERNAL_ERROR } from "./errors.ts";
-import { getCpuTemp, getOsVersion } from "./read_data.ts";
+import { getCpuTemp, getOsVersion, getUptimeString } from "./read_data.ts";
 import { Context } from "jsr:@oak/oak/";
 
 export async function handleDataRequest(ctx: Context) {
@@ -9,6 +9,8 @@ export async function handleDataRequest(ctx: Context) {
     const endpoints_list: Map<string, () => Promise<string>> = new Map();
     endpoints_list.set("CPUtemp", getCpuTemp);
     endpoints_list.set("OSversion", getOsVersion);
+    endpoints_list.set("serverUptime", getUptimeString);
+    endpoints_list.set("websiteUptime", getOsVersion);
     if (endpoints_list.has(target)) {
         const targetfunc: (() => Promise<string>) | undefined = endpoints_list
             .get(target);
