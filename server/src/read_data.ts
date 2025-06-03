@@ -58,7 +58,7 @@ export async function getUptimeString(): Promise<string> {
             outWords.push(word);
         }
     }
-    return outWords.join(" ");
+    return outWords.join(" ").trim().replace(/,$/, "");
 }
 
 export async function getGitFiles(reponame: string): Promise<string> {
