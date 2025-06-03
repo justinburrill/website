@@ -15,7 +15,7 @@ log(`Deno.cwd(): ${Deno.cwd()}`);
 log(`WEBSITE_ROOT: ${WEBSITE_ROOT}`);
 
 let PORT: number = 8080;
-const buildPath: string = `${FRONTEND_ROOT}/dist`;
+export const buildPath: string = `${FRONTEND_ROOT}/dist`;
 { // LOAD SERVER INFO FROM FILE
     try {
         const decoder = new TextDecoder("utf-8");
