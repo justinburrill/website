@@ -1,4 +1,4 @@
-import { INTERNAL_ERROR } from "./errors.ts";
+import { NOT_IMPLEMENTED_ERROR } from "./errors.ts";
 import { SERVER_ROOT } from "./server.ts";
 
 async function commandOutput(command: string): Promise<string> {
@@ -24,27 +24,47 @@ async function commandOutput(command: string): Promise<string> {
 }
 
 export async function getCpuTemp(): Promise<string> {
-    try {
-        const result = await commandOutput("python3 read_cpu_temp.py");
-        // console.log(`successfully returned Cpu temp: ${result}`);
-        return result;
-    } catch (err) {
-        console.error(
-            `calling python script failed due to: ${err}`,
-        );
-        throw INTERNAL_ERROR;
-    }
+    const result = await commandOutput("python3 read_cpu_temp.py");
+    // console.log(`successfully returned Cpu temp: ${result}`);
+    return result;
 }
 
 export async function getOsVersion(): Promise<string> {
-    try {
-        const version = await commandOutput(
-            "fastfetch | grep Ubuntu | head -1 | awk '{ print $3 }'",
-        );
-        // console.log(`got version ${version}`);
-        return version;
-    } catch (err) {
-        console.error(`couldn't get os version because ${err}`);
-        throw INTERNAL_ERROR;
+    const version = await commandOutput(
+        "fastfetch | grep Ubuntu | head -1 | awk '{ print $3 }'",
+    );
+    // console.log(`got version ${version}`);
+    return version;
+}
+
+async function getUptimeString(): Promise<string> {
+    const timestr = await commandOutput("uptime");
+    // example output:
+    // 21:16:28 up  2:14,  1 user,  load average: 0.17, 0.21, 0.15
+    const words: Array<string> = timestr.split(" ").filter((s) =>
+        !(/^$/.test(s))
+    ); // remove empty words and extra whitespace
+    const outWords: Array<string> = [];
+    let copying: boolean = false;
+    for (const word of words) {
+        if (word === "up") {
+            copying = true;
+            continue;
+        }
+        if (word.includes("user")) {
+            outWords.splice(-1); // extra value on the end
+            break;
+        }
+        if (copying) {
+            outWords.push(word);
+        }
     }
+    return outWords.join(" ");
+}
+
+export async function getGitFiles(reponame: string): Promise<string> {
+    let result: string = await commandOutput(
+        "git ls-tree -r master --name-only",
+    );
+    throw NOT_IMPLEMENTED_ERROR;
 }
