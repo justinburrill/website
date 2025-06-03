@@ -1,4 +1,3 @@
-import { NOT_IMPLEMENTED_ERROR } from "./errors.ts";
 import { SERVER_ROOT } from "./server.ts";
 
 async function commandOutput(command: string): Promise<string> {

@@ -1,7 +1,7 @@
 <template>
     <div class="center">
         <p>This website hosted on a ThinkPad running Ubuntu server {{ OSversion }}</p>
-        <p>Current CPU temp: {{ CPUtemp }} Server uptime: {{ serverUptime }} Website uptime: {{ websiteUptime }}</p>
+        <p>Current CPU temp: {{ CPUtemp }} Server uptime: {{ serverUptime }}</p>
         <p>I used these technologies:</p>
         <div id="logo-div" class="flex-container">
             <div class="logo-box" id="vue-box">
@@ -33,13 +33,11 @@ import { fetchData } from '../utils.ts';
 const temp = "loading..."
 let OSversion = ref(temp);
 let CPUtemp = ref(temp);
-let websiteUptime = ref(temp);
 let serverUptime = ref(temp);
 
 async function setup() {
     OSversion.value = await fetchData("OSversion");
     CPUtemp.value = await fetchData("CPUtemp");
-    websiteUptime.value = await fetchData("websiteUptime");
     serverUptime.value = await fetchData("serverUptime");
 }
 
