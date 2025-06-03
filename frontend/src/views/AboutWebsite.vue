@@ -1,7 +1,8 @@
 <template>
     <div class="center">
         <p>This website hosted on a ThinkPad running Ubuntu server {{ OSversion }}</p>
-        <p>Current CPU temp: {{ CPUtemp }} Server uptime: {{ serverUptime }}</p>
+        <p>Current CPU temp: {{ CPUtemp }}</p>
+        <p>Server uptime: {{ serverUptime }}</p>
         <p>I used these technologies:</p>
         <div id="logo-div" class="flex-container">
             <div class="logo-box" id="vue-box">
