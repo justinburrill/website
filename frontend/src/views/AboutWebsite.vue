@@ -39,8 +39,8 @@ let serverUptime = ref(temp);
 async function setup() {
     OSversion.value = await fetchData("OSversion");
     CPUtemp.value = await fetchData("CPUtemp");
-    console.log(`OSversion: ${OSversion.value}`)
-    console.log(`CPUtemp: ${CPUtemp.value}`)
+    websiteUptime.value = await fetchData("websiteUptime");
+    serverUptime.value = await fetchData("serverUptime");
 }
 
 
