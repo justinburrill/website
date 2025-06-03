@@ -57,5 +57,5 @@ export async function getUptimeString(): Promise<string> {
             outWords.push(word);
         }
     }
-    return outWords.join(" ");
+    return outWords.join(" ").trim().replace(/,$/, "");
 }
