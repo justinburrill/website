@@ -7,7 +7,7 @@ export async function fetchData(target: string): Promise<string> {
                 target: target,
             }),
         };
-        let status;
+        let status: number = 500;
         let data = await fetch(fetchUrl, reqObj).then((response) => {
             status = response.status;
             return response.json();
