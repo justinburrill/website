@@ -3,6 +3,7 @@ import { readFileSync } from "jsr:@std/fs/unstable-read-file";
 import * as path from "jsr:@std/path";
 import { handleDataRequest } from "./endpoints.ts";
 import { log } from "./utils.ts";
+import { isValidPath } from "./paths.ts";
 
 const WEBSITE_ROOT = path.resolve(path.join(
     path.dirname(path.fromFileUrl(import.meta.url)),
@@ -81,7 +82,7 @@ app.use(async (ctx, next) => {
     if (ctx.request.method == "GET") {
         try {
             const pathname = ctx.request.url.pathname;
-            // if (!isValidPath(pathname)) throw "400"; // should do some security checks here, this function doesn't work tho
+            if (!isValidPath(pathname)) throw "400"; // should do some security checks here, this function doesn't work tho
             log(`serving to specific path: ${pathname}`);
             return await send(ctx, pathname, {
                 root: buildPath,
