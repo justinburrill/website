@@ -22,3 +22,6 @@ export async function fetchData(target: string): Promise<string> {
         return "ERROR";
     }
 }
+
+export async function postToProject(target: string) {
+}
