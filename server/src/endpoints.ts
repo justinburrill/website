@@ -1,21 +1,24 @@
 import { INTERNAL_ERROR } from "./errors.ts";
 import { getCpuTemp, getOsVersion, getUptimeString } from "./read_data.ts";
 import { Context } from "jsr:@oak/oak/";
+import { removePrefix, return404, returnNotImplemented } from "./utils.ts";
 
 export async function handleDataRequest(ctx: Context) {
     const body = JSON.parse(await ctx.request.body.text());
     const target: string = body.target;
     console.log(`data request to on target '${target}'`);
     const endpoints_list: Map<string, () => Promise<string>> = new Map();
+    // point endpoint to function
     endpoints_list.set("CPUtemp", getCpuTemp);
     endpoints_list.set("OSversion", getOsVersion);
     endpoints_list.set("serverUptime", getUptimeString);
     endpoints_list.set("websiteUptime", getOsVersion);
+    // ==================
     if (endpoints_list.has(target)) {
         const targetfunc: (() => Promise<string>) | undefined = endpoints_list
             .get(target);
         if (targetfunc === undefined) {
-            throw "Target function found, but undefined.";
+            throw "Internal error: Target function found, but undefined.";
         }
         try {
             ctx.response.body = {
@@ -33,11 +36,20 @@ export async function handleDataRequest(ctx: Context) {
             return;
         }
     } else {
-        const ret_message = `Error: didn't recognize target "${body.target}"`;
-        console.log(ret_message);
-        ctx.response.status = 404;
-        ctx.response.body = {
-            message: ret_message,
-        };
+        return await return404(ctx);
     }
+}
+
+export async function handleProjectRequest(ctx: Context) {
+    const body = JSON.parse(await ctx.request.body.text());
+    const target_proj = removePrefix(
+        removePrefix(ctx.request.url.pathname, "/projects"),
+        "/",
+    );
+    return await returnNotImplemented(ctx);
+    // if (target_proj == "jsonformatter") {
+    //     // TODO
+    // } else {
+    //     return await return404(ctx);
+    // }
 }

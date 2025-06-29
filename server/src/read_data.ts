@@ -1,11 +1,13 @@
-import { INTERNAL_ERROR, NOT_IMPLEMENTED_ERROR } from "./errors.ts";
+import { NOT_IMPLEMENTED_ERROR } from "./errors.ts";
 import { SERVER_ROOT } from "./server.ts";
 
-async function commandOutput(command: string): Promise<string> {
-    const command_name = "bash";
+export async function commandOutput(
+    command: string,
+    shell: string = "bash",
+): Promise<string> {
     const args = ["-c", `cd ${SERVER_ROOT}/src && ` + command];
     // console.log(`command: ${command_name}, command args: ${args}`);
-    const process = new Deno.Command(command_name, {
+    const process = new Deno.Command(shell, {
         args: args,
         stdout: "piped",
         stderr: "piped",

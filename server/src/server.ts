@@ -1,44 +1,21 @@
 import { Application, Router, send } from "jsr:@oak/oak/";
-import { readFileSync } from "jsr:@std/fs/unstable-read-file";
 import * as path from "jsr:@std/path";
-import { handleDataRequest } from "./endpoints.ts";
+import { handleDataRequest, handleProjectRequest } from "./endpoints.ts";
 import { log } from "./utils.ts";
 import { isValidPath } from "./paths.ts";
+import { getPortFromConfig } from "./config.ts";
 
-const WEBSITE_ROOT = path.resolve(path.join(
+export const WEBSITE_ROOT = path.resolve(path.join(
     path.dirname(path.fromFileUrl(import.meta.url)),
     "../..",
 ));
 export const SERVER_ROOT = path.join(WEBSITE_ROOT, "/server");
 export const FRONTEND_ROOT = path.join(WEBSITE_ROOT, "/frontend");
-const CONFIG_NAME = ".SERVERINFO";
 log(`Deno.cwd(): ${Deno.cwd()}`);
 log(`WEBSITE_ROOT: ${WEBSITE_ROOT}`);
 
-let PORT: number = 8080;
+const PORT: number = getPortFromConfig();
 export const buildPath: string = `${FRONTEND_ROOT}/dist`;
-{ // LOAD SERVER INFO FROM FILE
-    try {
-        const decoder = new TextDecoder("utf-8");
-        const configFilepath: string = path.join(SERVER_ROOT, CONFIG_NAME);
-        const datajson = JSON.parse(
-            decoder.decode(readFileSync(configFilepath)),
-        );
-        PORT = datajson.port || PORT;
-        log(`read config file, serving on port ${PORT}`);
-    } catch (e) {
-        const errstr: string = e as string;
-        if (
-            errstr.toString().startsWith("NotFound: No such file or directory")
-        ) {
-            log(`No ${CONFIG_NAME} file, using default settings`);
-        } else {
-            log(
-                `error reading ${CONFIG_NAME} file, using default settings due to: ${e}`,
-            );
-        }
-    }
-}
 
 log(`Website dist path: ${buildPath}`);
 
@@ -65,12 +42,24 @@ app.use((context, next) => {
 app.use(async (ctx, next) => {
     if (ctx.request.method == "POST" && ctx.request.url.pathname == "/data") {
         try {
-            await handleDataRequest(ctx);
-            return;
+            return await handleDataRequest(ctx);
         } catch (err) {
             ctx.response.status = 500;
             ctx.response.body = { message: err };
-            console.error(`Errored on data request due to ${err}`);
+            console.error(`Errored on data POST request due to ${err}`);
+            return;
+        }
+    }
+    if (
+        ctx.request.method == "POST" &&
+        ctx.request.url.pathname.startsWith("/project")
+    ) {
+        try {
+            return await handleProjectRequest(ctx);
+        } catch (err) {
+            ctx.response.status = 500;
+            ctx.response.body = { message: err };
+            console.error(`Errored on project POST request due to ${err}`);
             return;
         }
     }
@@ -82,7 +71,7 @@ app.use(async (ctx, next) => {
     if (ctx.request.method == "GET") {
         try {
             const pathname = ctx.request.url.pathname;
-            if (!isValidPath(pathname)) throw "400"; // should do some security checks here, this function doesn't work tho
+            if (!isValidPath(pathname)) throw "400";
             log(`serving to specific path: ${pathname}`);
             return await send(ctx, pathname, {
                 root: buildPath,
