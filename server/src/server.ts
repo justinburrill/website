@@ -63,7 +63,7 @@ app.use(async (ctx, next) => {
             throw `only GET requests expected here, got a ${ctx.request.method}`;
         }
         const pathname = ctx.request.url.pathname;
-        if (!isValidPath(pathname)) throw "400";
+        if (!isValidPath(pathname)) throw `path ${pathname} isn't allowed`;
         log(`attempting to serve to specific path: ${pathname}`);
         return await send(ctx, pathname, {
             root: buildPath,
