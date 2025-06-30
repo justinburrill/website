@@ -12,7 +12,6 @@ export async function handleDataRequest(ctx: Context) {
     endpoints_list.set("CPUtemp", getCpuTemp);
     endpoints_list.set("OSversion", getOsVersion);
     endpoints_list.set("serverUptime", getUptimeString);
-    endpoints_list.set("websiteUptime", getOsVersion);
     // ==================
     if (endpoints_list.has(target)) {
         const targetfunc: (() => Promise<string>) | undefined = endpoints_list
