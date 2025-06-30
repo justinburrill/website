@@ -71,17 +71,16 @@ app.use(async (ctx, next) => {
         });
     } catch (err) {
         const errstr: string = err as string;
-        if (
-            !errstr.toString().trim().startsWith(
-                "NotFoundError: No such file or directory",
-            )
-        ) {
+        const isNotFoundError = errstr.toString().trim().startsWith(
+            "NotFoundError: No such file or directory",
+        );
+        if (!isNotFoundError) {
             console.error(
-                `Failed to serve to specific pathname due to: ${err}`,
+                `Failed to serve to specific pathname due to: ${err}. Falling back to homepage.`,
             );
+        } else {
+            log("Can't find file matching this path, falling back to homepage.");
         }
-        // return return404(ctx);
-        log("Can't find file matching this path, falling back to homepage");
         return await next();
     }
 });
@@ -94,7 +93,3 @@ app.use(async (context) => {
 
 log(`Listening on port ${PORT}`);
 await app.listen({ port: PORT });
-
-// // MAIN
-// if (import.meta.url === Deno.mainModule) {
-// }
