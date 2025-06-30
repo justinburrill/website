@@ -20,10 +20,9 @@ export function removePrefix(str: string, suffix: string) {
     }
 }
 
-export async function return404(ctx: Context) {
-    const body = JSON.parse(await ctx.request.body.text());
-    const ret_message = `Error: didn't recognize target "${body.target}"`;
-    log("Returning 404...");
+export function return404(ctx: Context) {
+    const ret_message = `Error: unknown target`;
+    log(`Returning 404 for request to ${ctx.request.url}`);
     console.log(ret_message);
     ctx.response.status = 404;
     ctx.response.body = {

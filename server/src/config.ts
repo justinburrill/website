@@ -1,10 +1,6 @@
-import * as path from "jsr:@std/path";
 import { log } from "./utils.ts";
 import { readFileSync } from "jsr:@std/fs/unstable-read-file";
-import { SERVER_ROOT } from "./server.ts";
-
-export const CFG_FILENAME = ".SERVERINFO";
-export const CFG_PATH: string = path.join(SERVER_ROOT, CFG_FILENAME);
+import { CFG_FILENAME, CFG_PATH } from "./server.ts";
 
 export function getPortFromConfig() {
     try {

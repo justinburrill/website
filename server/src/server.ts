@@ -1,7 +1,7 @@
 import { Application, Router, send } from "jsr:@oak/oak/";
 import * as path from "jsr:@std/path";
 import { handleDataRequest, handleProjectRequest } from "./endpoints.ts";
-import { log } from "./utils.ts";
+import { log, return404 } from "./utils.ts";
 import { isValidPath } from "./paths.ts";
 import { getPortFromConfig } from "./config.ts";
 
@@ -11,6 +11,8 @@ export const WEBSITE_ROOT = path.resolve(path.join(
 ));
 export const SERVER_ROOT = path.join(WEBSITE_ROOT, "/server");
 export const FRONTEND_ROOT = path.join(WEBSITE_ROOT, "/frontend");
+export const CFG_FILENAME = ".SERVERINFO";
+export const CFG_PATH: string = path.join(SERVER_ROOT, CFG_FILENAME);
 log(`Deno.cwd(): ${Deno.cwd()}`);
 log(`WEBSITE_ROOT: ${WEBSITE_ROOT}`);
 
@@ -68,47 +70,31 @@ app.use(async (ctx, next) => {
 
 // fallback to serve static file based on request url pathname
 app.use(async (ctx, next) => {
-    if (ctx.request.method == "GET") {
-        try {
-            const pathname = ctx.request.url.pathname;
-            if (!isValidPath(pathname)) throw "400";
-            log(`serving to specific path: ${pathname}`);
-            return await send(ctx, pathname, {
-                root: buildPath,
-                index: indexFileName,
-            });
-        } catch (err) {
-            const errstr: string = err as string;
-            if (
-                !errstr.toString().trim().startsWith(
-                    "NotFoundError: No such file or directory",
-                )
-            ) {
-                console.error(
-                    `Failed to serve to specific pathname due to: ${err}`,
-                );
-            }
-
-            // fallback to the home page
-            if (ctx.response.writable) {
-                try {
-                    ctx.response.status = parseInt(errstr);
-                } catch {
-                    ctx.response.status = 404;
-                }
-            } else {
-                console.error(
-                    "can't write error to response, it isn't writable",
-                );
-            }
-
-            return await next();
+    try {
+        if (ctx.request.method !== "GET") {
+            throw `only GET requests expected here, got a ${ctx.request.method}`;
         }
-    } // posts should have been handled by now (?)
-    else {
-        ctx.response.status = 404;
-        ctx.response.body = "Endpoint not recognized";
-        return;
+        const pathname = ctx.request.url.pathname;
+        if (!isValidPath(pathname)) throw "400";
+        log(`attempting to serve to specific path: ${pathname}`);
+        return await send(ctx, pathname, {
+            root: buildPath,
+            index: indexFileName,
+        });
+    } catch (err) {
+        const errstr: string = err as string;
+        if (
+            !errstr.toString().trim().startsWith(
+                "NotFoundError: No such file or directory",
+            )
+        ) {
+            console.error(
+                `Failed to serve to specific pathname due to: ${err}`,
+            );
+        }
+        // return return404(ctx);
+        log("Can't find file matching this path, falling back to homepage");
+        return await next();
     }
 });
 
