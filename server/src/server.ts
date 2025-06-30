@@ -1,7 +1,7 @@
 import { Application, Router, send } from "jsr:@oak/oak/";
 import * as path from "jsr:@std/path";
 import { handleDataRequest, handleProjectRequest } from "./endpoints.ts";
-import { log, return404 } from "./utils.ts";
+import { log } from "./utils.ts";
 import { isValidPath } from "./paths.ts";
 import { getPortFromConfig } from "./config.ts";
 
