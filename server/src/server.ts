@@ -1,6 +1,6 @@
 import { Application, Router, send } from "jsr:@oak/oak/";
 import * as path from "jsr:@std/path";
-import { handleDataRequest, handleProjectRequest } from "./endpoints.ts";
+import { handleDataRequest } from "./endpoints.ts";
 import { log } from "./utils.ts";
 import { isValidPath } from "./paths.ts";
 import { getPortFromConfig } from "./config.ts";
@@ -52,19 +52,7 @@ app.use(async (ctx, next) => {
             return;
         }
     }
-    if (
-        ctx.request.method == "POST" &&
-        ctx.request.url.pathname.startsWith("/project")
-    ) {
-        try {
-            return await handleProjectRequest(ctx);
-        } catch (err) {
-            ctx.response.status = 500;
-            ctx.response.body = { message: err };
-            console.error(`Errored on project POST request due to ${err}`);
-            return;
-        }
-    }
+
     return await next();
 });
 
@@ -92,7 +80,6 @@ app.use(async (ctx, next) => {
                 `Failed to serve to specific pathname due to: ${err}`,
             );
         }
-        // return return404(ctx);
         log("Can't find file matching this path, falling back to homepage");
         return await next();
     }
@@ -106,7 +93,3 @@ app.use(async (context) => {
 
 log(`Listening on port ${PORT}`);
 await app.listen({ port: PORT });
-
-// // MAIN
-// if (import.meta.url === Deno.mainModule) {
-// }

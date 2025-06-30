@@ -34,13 +34,11 @@ import { fetchData } from '../utils.ts';
 const temp = "loading..."
 let OSversion = ref(temp);
 let CPUtemp = ref(temp);
-let websiteUptime = ref(temp);
 let serverUptime = ref(temp);
 
 async function setup() {
     OSversion.value = await fetchData("OSversion");
     CPUtemp.value = await fetchData("CPUtemp");
-    websiteUptime.value = await fetchData("websiteUptime");
     serverUptime.value = await fetchData("serverUptime");
 }
 

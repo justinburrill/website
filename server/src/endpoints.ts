@@ -1,7 +1,7 @@
 import { INTERNAL_ERROR } from "./errors.ts";
 import { getCpuTemp, getOsVersion, getUptimeString } from "./read_data.ts";
 import { Context } from "jsr:@oak/oak/";
-import { removePrefix, return404, returnNotImplemented } from "./utils.ts";
+import { return404 } from "./utils.ts";
 
 export async function handleDataRequest(ctx: Context) {
     const body = JSON.parse(await ctx.request.body.text());
@@ -36,20 +36,6 @@ export async function handleDataRequest(ctx: Context) {
             return;
         }
     } else {
-        return await return404(ctx);
+        return return404(ctx);
     }
-}
-
-export async function handleProjectRequest(ctx: Context) {
-    const body = JSON.parse(await ctx.request.body.text());
-    const target_proj = removePrefix(
-        removePrefix(ctx.request.url.pathname, "/projects"),
-        "/",
-    );
-    return await returnNotImplemented(ctx);
-    // if (target_proj == "jsonformatter") {
-    //     // TODO
-    // } else {
-    //     return await return404(ctx);
-    // }
 }
