@@ -40,6 +40,11 @@ app.use((context, next) => {
     return next();
 });
 
+app.use((ctx, next) => {
+    ctx.response.headers.set('X-Clacks-Overhead', 'GNU Terry Pratchet');
+    return next();
+});
+
 // HANDLE DATA ENDPOINTS
 app.use(async (ctx, next) => {
     if (ctx.request.method == "POST" && ctx.request.url.pathname == "/data") {
