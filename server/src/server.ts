@@ -1,33 +1,49 @@
 import { Application, Router, send } from "jsr:@oak/oak/";
-import * as path from "jsr:@std/path";
 import { handleDataRequest } from "./endpoints.ts";
 import { log } from "./utils.ts";
-import { isValidPath } from "./paths.ts";
+import { isValidPath } from "./path_utils.ts";
 import { getPortFromConfig } from "./config.ts";
+import {
+    WEBSITE_ROOT,
+    SERVER_ROOT,
+    FRONTEND_ROOT,
+    CFG_FILENAME,
+    CFG_PATH,
+} from "./paths.ts";
+import {
+    checkSuspiciousIp,
+    requestIsSuspicious,
+    logSuspiciousRequest,
+} from "./security.ts";
 
-export const WEBSITE_ROOT = path.resolve(path.join(
-    path.dirname(path.fromFileUrl(import.meta.url)),
-    "../..",
-));
-export const SERVER_ROOT = path.join(WEBSITE_ROOT, "/server");
-export const FRONTEND_ROOT = path.join(WEBSITE_ROOT, "/frontend");
-export const CFG_FILENAME = ".SERVERINFO";
-export const CFG_PATH: string = path.join(SERVER_ROOT, CFG_FILENAME);
 log(`Deno.cwd(): ${Deno.cwd()}`);
 log(`WEBSITE_ROOT: ${WEBSITE_ROOT}`);
 
-const PORT: number = getPortFromConfig();
+const PORT: number = await getPortFromConfig();
 export const buildPath: string = `${FRONTEND_ROOT}/dist`;
 
 log(`Website dist path: ${buildPath}`);
 
-// ========================= SET UP SERVER
+// ============= SET UP SERVER
 const router = new Router();
 const app = new Application();
 app.use(router.routes());
 app.use(router.allowedMethods()); // do i need this?
 const indexFileName = "index.html";
 // =========================
+
+// SECURITY !!!
+app.use(async (ctx, next) => {
+    if (requestIsSuspicious(ctx)) {
+        logSuspiciousRequest(ctx);
+    }
+    if (await checkSuspiciousIp(ctx)) {
+        log(`Got suspicious request from IP ${ctx.request.ip}. Denying.`);
+        ctx.response.status = 403;
+        return;
+    }
+    await next();
+});
 
 // LOGGING
 app.use((context, next) => {
@@ -41,7 +57,7 @@ app.use((context, next) => {
 });
 
 app.use((ctx, next) => {
-    ctx.response.headers.set('X-Clacks-Overhead', 'GNU Terry Pratchet');
+    ctx.response.headers.set("X-Clacks-Overhead", "GNU Terry Pratchet");
     return next();
 });
 

@@ -1,7 +1,10 @@
-import { join } from "jsr:@std/path/join";
-import { buildPath } from "./server.ts";
+import * as path from "jsr:@std/path";
 
-export function isValidPath(path: string): boolean {
-    const fullPath = join(buildPath, path);
-    return fullPath.startsWith(buildPath); // make sure the path doesn't escape
-}
+export const WEBSITE_ROOT: string = path.resolve(path.join(
+    path.dirname(path.fromFileUrl(import.meta.url)),
+    "../..",
+));
+export const SERVER_ROOT: string = path.join(WEBSITE_ROOT, "/server");
+export const FRONTEND_ROOT: string = path.join(WEBSITE_ROOT, "/frontend");
+export const CFG_FILENAME: string = ".SERVERINFO";
+export const CFG_PATH: string = path.join(SERVER_ROOT, CFG_FILENAME);
