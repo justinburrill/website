@@ -1,5 +1,5 @@
 import { NOT_IMPLEMENTED_ERROR } from "./errors.ts";
-import { SERVER_ROOT } from "./server.ts";
+import { SERVER_ROOT } from "./paths.ts";
 
 export async function commandOutput(
     command: string,

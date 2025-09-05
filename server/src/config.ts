@@ -1,14 +1,10 @@
-import { log } from "./utils.ts";
-import { readFileSync } from "jsr:@std/fs/unstable-read-file";
-import { CFG_FILENAME, CFG_PATH } from "./server.ts";
+import { log, readJsonFile } from "./utils.ts";
+import { CFG_FILENAME, CFG_PATH } from "./paths.ts";
 
-export function getPortFromConfig() {
+export async function getPortFromConfig() {
     try {
-        const decoder = new TextDecoder("utf-8");
-        const datajson = JSON.parse(
-            decoder.decode(readFileSync(CFG_PATH)),
-        );
-        const port = datajson.port || 8080;
+        const json = await readJsonFile(CFG_PATH);
+        const port = Number(json.port) || 8080;
         log(`read config file, serving on port ${port}`);
         return port;
     } catch (e) {
