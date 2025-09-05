@@ -8,7 +8,10 @@ export async function readJsonFile(filepath: string, create_if_not_exist: boolea
     }
     catch (e) {
         await Deno.create(filepath);
-        await Deno.writeTextFile(filepath, "{}");
+        const data = new TextEncoder().encode("{}");
+        const file = await Deno.open(filepath, { write: true, createNew: true });
+        file.write(data);
+        file.close();
         return {};
     }
 }
