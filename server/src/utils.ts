@@ -1,9 +1,15 @@
 import { Context } from "jsr:@oak/oak/";
 
-export async function readJsonFile(filepath: string): Promise<any> {
-    const file_contents = await Deno.readTextFile(filepath);
-    const datajson = JSON.parse(file_contents);
-    return datajson;
+export async function readJsonFile(filepath: string, create_if_not_exist: bool = true): Promise<any> {
+    try {
+        const file_contents = await Deno.readTextFile(filepath);
+        const datajson = JSON.parse(file_contents);
+        return datajson;
+    }
+    catch (e) {
+        await Deno.writeTextFile(filepath, "{}");
+        return {};
+    }
 }
 
 export async function writeJsonFile(filepath: string, data: any): Promise<void> {
