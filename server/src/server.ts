@@ -34,14 +34,14 @@ const indexFileName = "index.html";
 
 // SECURITY !!!
 app.use(async (ctx, next) => {
-    if (requestIsSuspicious(ctx)) {
-        logSuspiciousRequest(ctx);
-    }
-    if (await checkSuspiciousIp(ctx)) {
-        log(`Got suspicious request from IP ${ctx.request.ip}. Denying.`);
-        ctx.response.status = 403;
-        return;
-    }
+    // if (requestIsSuspicious(ctx)) {
+    //     logSuspiciousRequest(ctx);
+    // }
+    // if (await checkSuspiciousIp(ctx)) {
+    //     log(`Got suspicious request from IP ${ctx.request.ip}. Denying.`);
+    //     ctx.response.status = 403;
+    //     return;
+    // }
     await next();
 });
 
