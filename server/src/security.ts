@@ -18,6 +18,10 @@ const SUSPICIOUS_ENDPOINTS = [
     "telescope/requests",
     "actuator",
 ];
+const SUSPICIOUS_KEYWORDS = [
+    "eval",
+    "php",
+];
 
 export function requestIsSuspicious(ctx: Context) {
     const url = removePrefix(ctx.request.url.pathname, "/");
@@ -26,6 +30,9 @@ export function requestIsSuspicious(ctx: Context) {
         SUSPICIOUS_ENDPOINTS.map((s: string) => url.startsWith(s)).some((e) =>
             e === true
         )
+        || SUSPICIOUS_KEYWORDS.map((s: string) => url.includes(s)).some((e) =>
+            e === true
+                                                                       )
     ) {
         return true;
     }
