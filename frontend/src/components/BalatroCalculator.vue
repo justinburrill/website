@@ -82,6 +82,7 @@ renew_hand_names();
         placeholder="List bonuses from Glass cards, enhanced cards, etc."><br>
     <label for="joker_bonus_input">Joker bonuses:</label><br>
     <input name="joker_bonus_input" ref="joker_bonus_input_ref" placeholder="List bonuses from jokers"><br>
+    <button @click="renew_hand_names">Update</button><br>
     <p>Total:<span id="total_num"></span></p>
     <div id="hands_div">
         <li v-for="[name, _values] in Object.entries(balatro.hands)" :key="hand_keys[name as balatro.HandName].value">
@@ -91,7 +92,6 @@ renew_hand_names();
                         balatro.HandName) }}
         </li>
     </div>
-    <button @click="renew_hand_names">Update</button>
 </template>
 
 <style lang="sass">
