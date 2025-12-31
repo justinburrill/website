@@ -87,9 +87,11 @@ renew_hand_names();
     <div id="hands_div">
         <li v-for="[name, _values] in Object.entries(balatro.hands)" :key="hand_keys[name as balatro.HandName].value">
             <button @click="() => { level_up(name as balatro.HandName) }">+</button> <button
-                @click="() => { level_down(name as balatro.HandName) }">-</button> {{ format_hand_name(name) }}: {{
-                    get_hand_value(name as
-                        balatro.HandName) }}
+                @click="() => { level_down(name as balatro.HandName) }">-</button>
+            &nbsp;<span class="handtext">{{ format_hand_name(name) }}: {{
+                get_hand_value(name as
+                    balatro.HandName) }}
+            </span>
         </li>
     </div>
 </template>
