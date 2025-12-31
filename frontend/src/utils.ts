@@ -25,3 +25,10 @@ export async function fetchData(target: string): Promise<string> {
 
 export async function postToProject(target: string) {
 }
+
+export function titleCase(s: string): string {
+    return s.toLowerCase()
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+}
