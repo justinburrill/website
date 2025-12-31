@@ -36,7 +36,7 @@ function get_hand_value(hand_name: balatro.HandName) {
 
 function format_hand_name(name: string): string {
     const hand_name = name as balatro.HandName;
-    return utils.titleCase(hand_name.replaceAll("_", " ")) + ` (lvl ${hand_levels[hand_name]})`;
+    return utils.titleCase(hand_name.replaceAll("_", " ")) + ` (lvl ${hand_levels[hand_name] + 1})`;
 }
 
 function renew_hand_names() {
