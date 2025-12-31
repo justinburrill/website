@@ -1,25 +1,15 @@
 #!/bin/bash
+source "$(dirname $0)/paths.sh" "$@"
 
-deno="${1:-'deno'}"
-
-pnpm="${2:-'pnpm'}"
-
-parent_path="$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )/.."
-server_path="$parent_path/server"
-frontend_path="$parent_path/frontend"
-install_script_path="$server_path/install.sh"
-
-cd $parent_path
+cd "$root_path" || exit 1
 
 # npm install sorta thing
 echo "--- Checking front-end dependencies... ---"
-chmod +x $install_script_path && $install_script_path "$parent_path" "$deno" "$pnpm"
+chmod +x "$install_script_path" && "$install_script_path" "$root_path" "$deno" "$pnpm"
 
-# build frontend
-echo "--- Building front-end... ---"
-cd "$frontend_path" && $pnpm build && cd - || exit
+deno="${1:-"${deno:-'deno'}"}"
+pnpm="${2:-"${pnpm:-'pnpm'}"}"
 
 # start it!
 echo "--- Starting deno server... ---"
-cd $server
-$deno --allow-write --allow-read --allow-net --allow-run $parent_path/server/src/server.ts
+"$qstart_script_path" "$deno" "$pnpm" 

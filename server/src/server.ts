@@ -1,20 +1,18 @@
 import { Application, Router, send } from "jsr:@oak/oak/";
-import { handleDataRequest } from "./endpoints.ts";
-import { log } from "./utils.ts";
-import { isValidPath } from "./path_utils.ts";
 import { getPortFromConfig } from "./config.ts";
+import { handleDataRequest } from "./endpoints.ts";
+import { isValidPath } from "./path_utils.ts";
 import {
-    WEBSITE_ROOT,
-    SERVER_ROOT,
     FRONTEND_ROOT,
-    CFG_FILENAME,
-    CFG_PATH,
+    WEBSITE_ROOT,
 } from "./paths.ts";
 import {
     checkSuspiciousIp,
-    requestIsSuspicious,
     logSuspiciousRequest,
+    requestIsSuspicious,
 } from "./security.ts";
+import { log } from "./utils.ts";
+import { mockContextState } from "@oak/oak/testing";
 
 log(`Deno.cwd(): ${Deno.cwd()}`);
 log(`WEBSITE_ROOT: ${WEBSITE_ROOT}`);
@@ -47,9 +45,16 @@ app.use(async (ctx, next) => {
 
 // LOGGING
 app.use((context, next) => {
-    let ip = context.request.ips.toString();
-    if (!ip) ip = context.request.ip;
-    if (!ip) ip = "??";
+    let ip = "??";
+    try {
+        if (context.request.ips.length > 0) {
+            ip = context.request.ips.toString()
+        }
+        else if (context.request.ip) { ip = context.request.ip }
+    }
+    catch (_) {
+        ;
+    }
     console.log(
         `new ${context.request.method} request to ${context.request.url} from ${ip}`,
     );
